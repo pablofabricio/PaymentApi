@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  app:
+    build:
+      args: 
+        user: Pablo
+        uid: 1000
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/var/www
+    networks:
+      - laravel-network
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docker/nginx/:/etc/nginx/conf.d/
+      - ./:/var/www
+    networks:
+      - laravel-network
+    depends_on:
+      - app
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: laravel
+      POSTGRES_USER: laraveluser
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    networks:
+      - laravel-network
+
+networks:
+  laravel-network:
+    driver: bridge
