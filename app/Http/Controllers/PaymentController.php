@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Payment\PostPayment;
+use App\Http\Resources\PaymentResource;
 use App\Services\Payment\PaymentService;
+use Illuminate\Http\Request;
 
 class PaymentController
 {
@@ -13,12 +14,12 @@ class PaymentController
 
     public function all()
     {
-        return response()->json($this->service->all());
+        return PaymentResource::collection($this->service->all());
     }
 
     public function find(string $id)
     {
-        return response()->json($this->service->find($id));
+        return new PaymentResource($this->service->find($id));
     }
     
     public function destroy(string $id)
@@ -28,14 +29,14 @@ class PaymentController
         return response()->json(null, 204);
     }
     
-    public function confirmPayment(string $id)
+    public function confirmPayment(string $id, Request $request)
     {
-        $this->service->confirmPayment($id);
+        $this->service->confirmPayment($request->all(), $id);
 
         return response()->json(null, 204);
     }
 
-    public function create(PostPayment $request)
+    public function create(Request $request)
     {
         $resource = $this->service->create($request->all());
 

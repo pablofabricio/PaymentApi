@@ -10,7 +10,13 @@ class Payment extends Model
     use HasFactory;
 
     protected $table = 'payment';
+    
+    protected $keyType = 'string';
+    protected $primaryKey = 'id';
+    public $incrementing = false;
+
     protected $fillable = [
+        'id',
         'transaction_amount',
         'installments',
         'token',

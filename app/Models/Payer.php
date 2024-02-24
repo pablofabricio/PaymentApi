@@ -11,6 +11,7 @@ class Payer extends Model
 
     protected $table = 'payer';
     protected $fillable = [
+        'id',
         'entity_type',
         'type',
         'email',

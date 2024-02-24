@@ -2,11 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use DateTime;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-
 function base64url_encode($input, $padding = true)
 {
     $output = strtr(base64_encode($input), '+/', '-_');
@@ -22,7 +17,7 @@ function base64url_decode($input)
 
 class AuthController extends Controller
 {
-    public function login(Application $app)
+    public function login()
     {
         $credentials = request(['email', 'password']);
 
@@ -30,7 +25,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToken($token, $cookie);
+        return $this->respondWithToken($token);
     }
 
     public function me()
@@ -53,6 +48,7 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         $expires = auth()->factory()->getTTL() * 60;
+
         $response = response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',

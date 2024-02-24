@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -43,8 +44,34 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (Throwable $e) {
+            return $this->handleException($e);
         });
+    }
+
+    protected function handleException(Throwable $e): JsonResponse
+    {
+        $statusCode = $this->getStatusCode($e);
+        $message = $e->getMessage();
+    
+        return response()->json(['message' => $message], $statusCode);
+    }
+    
+    protected function getStatusCode(Throwable $e): int
+    {
+        if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException ||
+            $e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+            return 404;
+        }
+    
+        if ($e instanceof \Illuminate\Validation\ValidationException) {
+            return 422;
+        }
+    
+        if (empty($e->getCode())) {
+            return 500;
+        }
+
+        return $e->getCode();
     }
 }
