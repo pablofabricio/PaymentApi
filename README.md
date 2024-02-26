@@ -33,6 +33,11 @@ Run tests to ensure everything is set up correctly:
 ./vendor/bin/phpunit
 ```
 
+- Swagger Documentation
+```sh
+http://localhost:8080/rest/documentation/
+```
+
 - Contact
 For any inquiries or support, please feel free to contact:
 ```sh
