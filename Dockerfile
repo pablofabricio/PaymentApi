@@ -8,10 +8,15 @@ ARG uid
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     libzip-dev \
-    libpq-dev
+    libpq-dev \
+    git \
+    zip \
+    unzip 
+
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_pgsql
+RUN docker-php-ext-configure zip && \
+    docker-php-ext-install zip pdo pdo_pgsql
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

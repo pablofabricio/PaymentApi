@@ -1,0 +1,320 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Payment API Documentation"
+    },
+    "servers": [
+        {
+            "url": "/rest/"
+        }
+    ],
+    "paths": {
+        "login": {
+            "post": {
+                "tags": ["Authentication"],
+                "summary": "User login",
+                "description": "Authenticate a user and generate an access token.",
+                "parameters": [],
+                "requestBody": {
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "email": { "type": "string" },
+                          "password": { "type": "string" }
+                        },
+                        "required": ["email", "password"]
+                      }
+                    }
+                  }
+                },
+                "responses": {
+                  "200": {
+                    "description": "Successful login",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                              "access_token": { "type": "string" },
+                              "token_type": { "type": "string" },
+                              "expires_in": { "type": "integer" }
+                            }
+                        }
+                      }
+                    }
+                  },
+                  "401": {
+                    "description": "Unauthorized",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "error": { "type": "string" }
+                          },
+                          "required": ["error"]
+                        }
+                      }
+                    }
+                  }
+                }
+            }
+        },
+        "payments": {
+            "get": {
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Retrieve all payments",
+                "description": "The purpose of this method is to retrieve all payment records.",
+                "parameters": [],
+                "responses": {
+                  "200": {
+                    "description": "Successful response",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": { "type": "string" },
+                                "status": { "type": "string" },
+                                "transaction_amount": { "type": "string" },
+                                "installments": { "type": "integer" },
+                                "token": { "type": "string" },
+                                "payment_method_id": { "type": "string" },
+                                "payer": {
+                                  "type": "object",
+                                  "properties": {
+                                    "entity_type": { "type": "string" },
+                                    "type": { "type": "string" },
+                                    "email": { "type": "string" },
+                                    "identification": {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": { "type": "string" },
+                                        "number": { "type": "string" }
+                                      }
+                                    }
+                                  }
+                                },
+                                "notification_url": { "type": "string" },
+                                "created_at": { "type": "string", "format": "date-time" },
+                                "updated_at": { "type": "string", "format": "date-time" }
+                              }
+                            }
+                        }
+                      }
+                    }
+                  },
+                  "403": {
+                    "description": "Forbidden"
+                  }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Payment"
+                  ],
+                  "summary": "Create a new payment",
+                  "description": "The purpose of this method is to create a new payment record.",
+                  "parameters": [],
+                  "requestBody": {
+                    "required": true,
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "transaction_amount": { "type": "number" },
+                            "installments": { "type": "integer" },
+                            "token": { "type": "string" },
+                            "payment_method_id": { "type": "string" },
+                            "payer": {
+                              "type": "object",
+                              "properties": {
+                                "email": { "type": "string" },
+                                "identification": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": { "type": "string" },
+                                    "number": { "type": "string" }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "responses": {
+                    "201": {
+                      "description": "Created",
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                            "type": "object",
+                            "properties": {
+                              "id": { "type": "string" },
+                              "created_at": { "type": "string", "format": "date-time" }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "400": {
+                      "description": "payment not provided in the request body"
+                    },
+                    "403": {
+                      "description": "Forbidden"
+                    },
+                    "422": {
+                      "description": "Invalid payment provided"
+                    }
+                }
+            }
+        },
+        "payments/{id}": {
+            "get": {
+                "tags": [
+                  "Payment"
+                ],
+                "summary": "Retrieve a payment by ID",
+                "description": "The purpose of this method is to retrieve a payment record by its ID.",
+                "parameters": [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                      "type": "string"
+                    },
+                    "description": "The ID of the payment to retrieve"
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "Successful response",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "id": { "type": "string" },
+                            "status": { "type": "string" },
+                            "transaction_amount": { "type": "string" },
+                            "installments": { "type": "integer" },
+                            "token": { "type": "string" },
+                            "payment_method_id": { "type": "string" },
+                            "payer": {
+                              "type": "object",
+                              "properties": {
+                                "entity_type": { "type": "string" },
+                                "type": { "type": "string" },
+                                "email": { "type": "string" },
+                                "identification": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": { "type": "string" },
+                                    "number": { "type": "string" }
+                                  }
+                                }
+                              }
+                            },
+                            "notification_url": { "type": "string" },
+                            "created_at": { "type": "string", "format": "date-time" },
+                            "updated_at": { "type": "string", "format": "date-time" }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "403": {
+                    "description": "Forbidden"
+                  },
+                  "404": {
+                    "description": "Not Found"
+                  }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Payment"
+                  ],
+                  "summary": "Cancel a payment by ID",
+                  "description": "The purpose of this method is to cancel a payment by its ID. The status of the payment will be set to 'canceled'.",
+                  "parameters": [
+                    {
+                      "name": "id",
+                      "in": "path",
+                      "description": "ID of the payment to cancel",
+                      "required": true,
+                      "schema": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                  "responses": {
+                    "204": {
+                      "description": "No Content"
+                    },
+                    "403": {
+                      "description": "Forbidden"
+                    },
+                    "404": {
+                      "description": "Not Found"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Payment"
+                  ],
+                  "summary": "Update payment status",
+                  "description": "This method updates the status of a payment.",
+                  "parameters": [
+                    {
+                      "name": "id",
+                      "in": "path",
+                      "description": "ID of the payment to be updated",
+                      "required": true,
+                      "schema": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                  "requestBody": {
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "status": {
+                              "type": "string",
+                              "example": "PAID"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "responses": {
+                    "204": {
+                      "description": "No Content"
+                    },
+                    "403": {
+                      "description": "Forbidden"
+                    },
+                    "404": {
+                      "description": "Not Found"
+                    }
+                }
+            }
+        }
+    }
+}

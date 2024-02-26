@@ -68,7 +68,7 @@ class Handler extends ExceptionHandler
             return 422;
         }
     
-        if (empty($e->getCode())) {
+        if (empty($e->getCode()) || is_string($e->getCode())) {
             return 500;
         }
 
