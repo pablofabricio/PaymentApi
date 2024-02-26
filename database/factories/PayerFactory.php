@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Payer>
@@ -17,11 +18,11 @@ class PayerFactory extends Factory
     public function definition()
     {
         return [
-            'entity_type' => $this->faker->randomElement(['individual', 'company']),
-            'type' => $this->faker->randomElement(['customer', 'merchant']),
-            'email' => $this->faker->unique()->safeEmail,
-            'identification_type' => $this->faker->randomElement(['CPF', 'CNPJ']),
-            'identification_number' => $this->faker->unique()->numerify('##############'),
+            'entity_type' => 'individual',
+            'type' => 'customer',
+            'email' => Str::random(10) . '@example.com',
+            'identification_type' => 'CPF',
+            'identification_number' => mt_rand(10000000000, 99999999999),
         ];
     }
 }
