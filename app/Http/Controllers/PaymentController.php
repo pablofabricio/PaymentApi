@@ -31,7 +31,9 @@ class PaymentController
     
     public function confirmPayment(string $id, Request $request)
     {
-        $this->service->confirmPayment($request->all(), $id);
+        $data = $request->all();
+        $data['status'] = $request->input('status', 'PAID');
+        $this->service->confirmPayment($data, $id);
 
         return response()->json(null, 204);
     }

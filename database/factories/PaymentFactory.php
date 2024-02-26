@@ -1,6 +1,7 @@
 <?php
-
 namespace Database\Factories;
+
+use Illuminate\Support\Str;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,6 +18,7 @@ class PaymentFactory extends Factory
     public function definition()
     {
         return [
+            'id' => Str::uuid()->toString(),
             'transaction_amount' => $this->faker->randomFloat(2, 10, 1000),
             'installments' => $this->faker->numberBetween(1, 12),
             'token' => $this->faker->uuid,
@@ -25,7 +27,7 @@ class PaymentFactory extends Factory
             },
             'payment_method_id' => $this->faker->uuid,
             'notification_url' => $this->faker->url,
-            'status' => $this->faker->randomElement(['pending', 'approved', 'rejected']),
+            'status' => $this->faker->randomElement(['PENDING', 'PAID', 'CANCELED']),
         ];
     }
 }
