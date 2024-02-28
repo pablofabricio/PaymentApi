@@ -93,9 +93,9 @@ class PaymentService
 
     private function createPayer(array $data) 
     {
-        $cpf = preg_replace("/[^0-9]/", "", $data['identification']['number']);
+        $identificationNumber = preg_replace("/[^0-9]/", "", $data['identification']['number']);
 
-        $payer = $this->payerRepository->where('identification_number', $cpf)->first();
+        $payer = $this->payerRepository->where('identification_number', $identificationNumber)->first();
 
         if (!empty($payer)) {
             return $payer;
@@ -105,8 +105,8 @@ class PaymentService
             'entity_type' => 'individual',
             'type' => 'customer',
             'email' => $data['email'],
-            'identification_type' => "CPF", // TO DO
-            'identification_number' => $cpf,
+            'identification_type' => $data['identification']['type'], 
+            'identification_number' => $identificationNumber,
         ]);
     }
 }
