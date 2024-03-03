@@ -13,6 +13,11 @@ Access the Docker container's shell:
 docker-compose exec app bash
 ```
 
+Copy and Paste .env.example as .env
+```sh
+Copy the contents of .env.example and create a new file named .env. Then, paste the copied contents into .env. Ensure to adjust the variables according to your environment.
+```
+
 Install dependencies using Composer:
 ```sh
 composer install
