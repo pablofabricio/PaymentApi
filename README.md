@@ -43,6 +43,17 @@ Run tests to ensure everything is set up correctly:
 http://localhost:8080/rest/documentation/
 ```
 
+- API Authentication
+```sh
+
+{
+"email": "paymentapi.user@gmail.com", 
+"password": 1234567
+}
+
+For more details on how to authenticate with our API, refer to our API documentation.
+```
+
 - Contact
 For any inquiries or support, please feel free to contact:
 ```sh
